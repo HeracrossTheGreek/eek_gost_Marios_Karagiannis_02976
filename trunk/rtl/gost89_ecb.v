@@ -217,11 +217,6 @@ module gost89_ecb_decrypt(
   gost89_round
     rnd(clk, sbox, round_key, n1, n2, out1, out2);
 
-  initial begin
-    busy = 0;
-    round_num = 32;
-  end
-
   always @(posedge clk) begin
     if (load_data) begin
       n1 <= in[63:32];
@@ -243,8 +238,8 @@ module gost89_ecb_decrypt(
         n2 <= out2;
       end
       if (round_num == 32) begin
-        out[63:32] = out2;
-        out[31:0]  = out1;
+        out[63:32] <= out2;
+        out[31:0]  <= out1;
         busy <= 0;
       end
     end
