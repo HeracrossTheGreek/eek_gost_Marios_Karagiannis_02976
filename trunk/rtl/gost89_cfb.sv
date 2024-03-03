@@ -1,26 +1,26 @@
 module gost89_cfb(
-  input              clk,
-  input              reset,
-  input              mode,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic              clk,
+  input logic              reset,
+  input logic              mode,
+  input logic              load_data,
+  input logic      [511:0] sbox,
+  input logic      [255:0] key,
+  input logic      [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [63:0] gamma;
-  reg  [63:0] in_value;
-  wire [63:0] out_ecb;
-  wire        reset_ecb, load_ecb, busy_ecb;
+  logic  [63:0] gamma;
+  logic  [63:0] in_value;
+  logic [63:0] out_ecb;
+  logic        reset_ecb, load_ecb, busy_ecb;
 
   assign load_ecb = !reset && load_data;
   assign reset_ecb = load_ecb;
 
   gost89_ecb_encrypt
-    ecb_encrypt(clk, reset_ecb, load_ecb, sbox, key, gamma, out_ecb, busy_ecb);
+    ecb_encrypt(.clk, .reset(reset_ecb), .load_data(load_ecb), .sbox, .key, .in(gamma), .out(out_ecb), .busy(busy_ecb));
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (reset && !load_data) begin
       gamma <= in;
       busy <= 0;
@@ -41,19 +41,19 @@ module gost89_cfb(
 endmodule
 
 module gost89_cfb_encrypt(
-  input              clk,
-  input              reset,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic              clk,
+  input logic              reset,
+  input logic              load_data,
+  input logic      [511:0] sbox,
+  input logic      [255:0] key,
+  input logic      [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [63:0] gamma;
-  reg  [63:0] in_value;
-  wire [63:0] out_ecb;
-  wire        load_ecb, busy_ecb;
+  logic  [63:0] gamma;
+  logic  [63:0] in_value;
+  logic [63:0] out_ecb;
+  logic        load_ecb, busy_ecb;
 
   assign load_ecb = !reset && load_data;
   assign reset_ecb = load_ecb;
@@ -61,7 +61,7 @@ module gost89_cfb_encrypt(
   gost89_ecb_encrypt
     ecb_encrypt(clk, reset_ecb, load_ecb, sbox, key, gamma, out_ecb, busy_ecb);
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (reset && !load_data) begin
       gamma <= in;
       busy <= 0;
@@ -81,19 +81,19 @@ module gost89_cfb_encrypt(
 endmodule
 
 module gost89_cfb_decrypt(
-  input              clk,
-  input              reset,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic              clk,
+  input logic              reset,
+  input logic              load_data,
+  input logic      [511:0] sbox,
+  input logic      [255:0] key,
+  input logic      [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [63:0] gamma;
-  reg  [63:0] in_value;
-  wire [63:0] out_ecb;
-  wire        load_ecb, busy_ecb;
+  logic  [63:0] gamma;
+  logic  [63:0] in_value;
+  logic [63:0] out_ecb;
+  logic        load_ecb, busy_ecb;
 
   assign load_ecb = !reset && load_data;
   assign reset_ecb = load_ecb;
@@ -101,7 +101,7 @@ module gost89_cfb_decrypt(
   gost89_ecb_encrypt
     ecb_encrypt(clk, reset_ecb, load_ecb, sbox, key, gamma, out_ecb, busy_ecb);
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (reset && !load_data) begin
       gamma <= in;
       busy <= 0;
