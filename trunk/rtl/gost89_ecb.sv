@@ -1,22 +1,22 @@
 module gost89_ecb(
-  input              clk,
-  input              reset,
-  input              mode,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic          clk,
+  input logic          reset,
+  input logic          mode,
+  input logic          load_data,
+  input logic  [511:0] sbox,
+  input logic  [255:0] key,
+  input logic  [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [5:0]  round_num;
-  reg  [31:0] n1, n2, round_key;
-  wire [31:0] out1, out2;
+  logic  [5:0]  round_num;
+  logic  [31:0] n1, n2, round_key;
+  logic [31:0] out1, out2;
 
   gost89_round
-    rnd(clk, sbox, round_key, n1, n2, out1, out2);
+    rnd(.*, .key(round_key));
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (load_data) begin
       n1 <= in[63:32];
       n2 <= in[31:0];
@@ -44,7 +44,7 @@ module gost89_ecb(
     end
   end
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (mode)
       case (round_num)
         0:  round_key <= key[255:224];
@@ -119,23 +119,23 @@ module gost89_ecb(
 endmodule
 
 module gost89_ecb_encrypt(
-  input              clk,
-  input              reset,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic          clk,
+  input logic          reset,
+  input logic          load_data,
+  input logic  [511:0] sbox,
+  input logic  [255:0] key,
+  input logic  [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [5:0]  round_num;
-  reg  [31:0] n1, n2, round_key;
-  wire [31:0] out1, out2;
+  logic  [5:0]  round_num;
+  logic  [31:0] n1, n2, round_key;
+  logic [31:0] out1, out2;
 
   gost89_round
-    rnd(clk, sbox, round_key, n1, n2, out1, out2);
+    rnd(.*,  .key(round_key));
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (load_data) begin
       n1 <= in[63:32];
       n2 <= in[31:0];
@@ -163,7 +163,7 @@ module gost89_ecb_encrypt(
     end
   end
 
-  always @(posedge clk)
+  always_ff @(posedge clk)
     case (round_num)
       0:  round_key <= key[255:224];
       1:  round_key <= key[223:192];
@@ -201,23 +201,23 @@ module gost89_ecb_encrypt(
 endmodule
 
 module gost89_ecb_decrypt(
-  input              clk,
-  input              reset,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [63:0]  out,
-  output reg         busy
+  input logic          clk,
+  input logic          reset,
+  input logic          load_data,
+  input logic  [511:0] sbox,
+  input logic  [255:0] key,
+  input logic  [63:0]  in,
+  output logic [63:0]  out,
+  output logic         busy
 );
-  reg  [5:0]  round_num;
-  reg  [31:0] n1, n2, round_key;
-  wire [31:0] out1, out2;
+  logic  [5:0]  round_num;
+  logic  [31:0] n1, n2, round_key;
+  logic [31:0] out1, out2;
 
   gost89_round
-    rnd(clk, sbox, round_key, n1, n2, out1, out2);
+    rnd(.*, .key(round_key));
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (load_data) begin
       n1 <= in[63:32];
       n2 <= in[31:0];
@@ -245,7 +245,7 @@ module gost89_ecb_decrypt(
     end
   end
 
-  always @(posedge clk)
+  always_ff @(posedge clk)
     case (round_num)
       0:  round_key <= key[255:224];
       1:  round_key <= key[223:192];
