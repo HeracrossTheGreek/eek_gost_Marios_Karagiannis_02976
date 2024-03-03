@@ -1,14 +1,14 @@
 module gost89_pipelined_ecb_encrypt(
-  input          clk,
-  input  [511:0] sbox,
-  input  [255:0] key,
-  input  [63:0]  in,
-  output [63:0]  out
+  input logic          clk,
+  input logic  [511:0] sbox,
+  input logic  [255:0] key,
+  input logic  [63:0]  in,
+  output logic [63:0]  out
 );
-  reg  [31:0] n1[31:0], n2[31:0];
-  wire [31:0] out1[31:0], out2[31:0];
+  logic  [31:0] n1[31:0], n2[31:0];
+  logic [31:0] out1[31:0], out2[31:0];
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     n1[0]  <= in[63:32]; n2[0]  <= in[31:0];
     n1[1]  <= out1[0];   n2[1]  <= out2[0];
     n1[2]  <= out1[1];   n2[2]  <= out2[1];
@@ -82,16 +82,16 @@ module gost89_pipelined_ecb_encrypt(
 endmodule
 
 module gost89_pipelined_ecb_decrypt(
-  input          clk,
-  input  [511:0] sbox,
-  input  [255:0] key,
-  input  [63:0]  in,
-  output [63:0]  out
+  input logic          clk,
+  input logic  [511:0] sbox,
+  input logic  [255:0] key,
+  input logic  [63:0]  in,
+  output logic [63:0]  out
 );
-  reg  [31:0] n1[31:0], n2[31:0];
-  wire [31:0] out1[31:0], out2[31:0];
+  logic  [31:0] n1[31:0], n2[31:0];
+  logic [31:0] out1[31:0], out2[31:0];
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     n1[0]  <= in[63:32]; n2[0]  <= in[31:0];
     n1[1]  <= out1[0];   n2[1]  <= out2[0];
     n1[2]  <= out1[1];   n2[2]  <= out2[1];

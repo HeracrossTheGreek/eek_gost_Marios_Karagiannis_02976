@@ -1,23 +1,23 @@
 module gost89_mac(
-  input              clk,
-  input              reset,
-  input              load_data,
-  input      [511:0] sbox,
-  input      [255:0] key,
-  input      [63:0]  in,
-  output reg [31:0]  out,
-  output reg         busy
+  input logic              clk,
+  input logic              reset,
+  input logic              load_data,
+  input logic      [511:0] sbox,
+  input logic      [255:0] key,
+  input logic      [63:0]  in,
+  output logic [31:0]  out,
+  output logic         busy
 );
-  reg  [4:0]  counter;
-  reg  [31:0] round_key;
-  reg         need_xor;
-  reg  [31:0] n1, n2;
-  wire [31:0] out1, out2;
+  logic  [4:0]  counter;
+  logic  [31:0] round_key;
+  logic         need_xor;
+  logic  [31:0] n1, n2;
+  logic [31:0] out1, out2;
 
   gost89_round
-    rnd(clk, sbox, round_key, n1, n2, out1, out2);
+    rnd(.*, .key(round_key));
 
-  always @(posedge clk) begin
+  always_ff @(posedge clk) begin
     if (reset && !load_data) begin
       counter  <= 17;
       need_xor <= 0;
@@ -59,7 +59,7 @@ module gost89_mac(
     end
   end
 
-  always @(posedge clk)
+  always_ff @(posedge clk)
     case (counter)
       0:  round_key <= key[255:224];
       1:  round_key <= key[223:192];
