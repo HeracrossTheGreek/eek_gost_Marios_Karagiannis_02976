@@ -22,6 +22,13 @@ module gost89_ecb_tb;
   gost89_ecb_decrypt
     ecb_decrypt(clk, reset, load_data, sbox, key, in_d2, out_d2, busy_d2);
 
+  always_ff @(posedge clk) begin
+    if (!load_data) begin
+      assert(out_d1 == out_d2 && out_e1 == out_e2)
+        else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
+    end
+  end
+
 /*
 ECB mode:
 d5a8a608f4f115b4 389eb44a391474c4 379e59c3c96bb2ab 3f38ae3b8f541361 
