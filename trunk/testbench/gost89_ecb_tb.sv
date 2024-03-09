@@ -22,10 +22,14 @@ module gost89_ecb_tb;
   gost89_ecb_decrypt
     ecb_decrypt(clk, reset, load_data, sbox, key, in_d2, out_d2, busy_d2);
 
-  always_ff @(posedge clk) begin
-    assert(out_d1 === out_d2 && out_e1 === out_e2)
-      else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
-  end
+  // always_ff @(posedge clk) begin
+  //   assert(out_d1 === out_d2 && out_e1 === out_e2)
+  //     else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
+  // end
+
+  assert property (@(posedge clk) out_d1 === out_d2 && out_e1 === out_e2)
+  else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
+
 
 /*
 ECB mode:
