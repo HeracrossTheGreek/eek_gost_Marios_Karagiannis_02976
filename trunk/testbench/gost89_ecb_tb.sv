@@ -52,15 +52,6 @@ module gost89_ecb_tb;
                                           $rose(load_data)))
    else $error("Busy signal rose inexplicably\n");
 
-
-
-
-
-
-
-
-
-
 /*
 ECB mode:
 d5a8a608f4f115b4 389eb44a391474c4 379e59c3c96bb2ab 3f38ae3b8f541361 

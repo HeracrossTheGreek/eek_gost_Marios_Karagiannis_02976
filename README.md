@@ -3,3 +3,5 @@ This is the repository of my implementation of the GOST 28147-89 block cipher, i
 Source code is located in trunk/rtl
 
 Testbench files, along with the makefile, are located in trunk/testbench
+
+A presentation of my work is located in the folder Presentation
