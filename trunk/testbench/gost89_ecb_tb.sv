@@ -23,8 +23,8 @@ module gost89_ecb_tb;
     ecb_decrypt(clk, reset, load_data, sbox, key, in_d2, out_d2, busy_d2);
 
 
-    assert property (@(posedge clk) out_d1 === out_d2 && out_e1 === out_e2)
-  else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
+  assert property (@(posedge clk) out_d1 === out_d2 && out_e1 === out_e2)
+    else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
 
   assert property (
     @(posedge clk) (($changed(out_d1) ||
@@ -33,6 +33,24 @@ module gost89_ecb_tb;
                     $changed(out_e2)) |-> 
                                           ($past(load_data, 33) || $past(reset))))
    else $error("Output value changed inexplicably\n");
+
+
+  assert property (
+    @(posedge clk) (($fell(busy_d1) ||
+                    $fell(busy_d2) || 
+                    $fell(busy_e1) || 
+                    $fell(busy_e2)) |-> 
+                                          ($past(load_data, 33) || $rose(reset))))
+   else $error("Busy signal fell inexplicably\n");
+
+
+  assert property (
+    @(posedge clk) (($rose(busy_d1) ||
+                    $rose(busy_d2) || 
+                    $rose(busy_e1) || 
+                    $rose(busy_e2)) |-> 
+                                          $rose(load_data)))
+   else $error("Busy signal rose inexplicably\n");
 
 
 
