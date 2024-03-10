@@ -27,11 +27,11 @@ module gost89_ecb_tb;
   else $error("Output mismatch detected!\nout_e1 = %h, out_e2 = %h\nout_d1 = %h, out_d2 = %h", out_e1, out_e2, out_d1, out_d2);
 
   assert property (
-    @(posedge clk) ($changed(out_d1) ||
+    @(posedge clk) (($changed(out_d1) ||
                     $changed(out_d2) || 
                     $changed(out_e1) || 
-                    $changed(out_e2) |-> 
-                                          $past(load_data, 33)))
+                    $changed(out_e2)) |-> 
+                                          ($past(load_data, 33) || $past(reset))))
    else $error("Output value changed inexplicably\n");
 
 
